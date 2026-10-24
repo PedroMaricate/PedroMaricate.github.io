@@ -1,0 +1,967 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Pedro Maricate</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Pedro Almeida Maricate Santos: Sistemas de Informação (ESPM), intercâmbio na Heilbronn University. Dados, tecnologia e negócios.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@500;700;900&family=Hanken+Grotesk:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: scoreboard-condensed name beside a tall photo, then a run of
+   "worksheets" (reconciliation, pipeline, projects) on cool ledger paper. */
+:root {
+  --paper: #EFF1EE;
+  --sheet: #F8F9F7;
+  --ink: #0F1B2D;
+  --muted: #586374;
+  --rule: #D3D8D1;
+  --blue: #1D57C9;
+  --blue-soft: #DCE6FA;
+  --match: #23845A;
+  --match-soft: #DAEFE3;
+  --flag: #B9480F;
+  --flag-soft: #F8E3D6;
+  --display: "Big Shoulders Display", "Arial Narrow", "Roboto Condensed", sans-serif;
+  --body: "Hanken Grotesk", "Segoe UI", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+  --max: 72rem;
+  --contact: #1D57C9;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #0B1322; --sheet: #111B2E; --ink: #E7ECF3; --muted: #95A1B3; --rule: #23314A;
+    --blue: #7BA3FF; --blue-soft: #1A2B4F; --match: #52C98F; --match-soft: #12352A;
+    --flag: #F08A50; --flag-soft: #3A2216; --contact: #1F4CB0; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #0B1322; --sheet: #111B2E; --ink: #E7ECF3; --muted: #95A1B3; --rule: #23314A;
+  --blue: #7BA3FF; --blue-soft: #1A2B4F; --match: #52C98F; --match-soft: #12352A;
+  --flag: #F08A50; --flag-soft: #3A2216; --contact: #1F4CB0; color-scheme: dark;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0; background: var(--paper); color: var(--ink);
+  font-family: var(--body); font-size: 1.0625rem; line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+img { max-width: 100%; display: block; }
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; }
+#app[data-lang="pt"] [lang="en"], #app[data-lang="en"] [lang="pt"] { display: none !important; }
+
+.wrap {
+  max-width: var(--max); margin-inline: auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+@media (min-width: 700px) { .wrap { padding-left: max(2.5rem, env(safe-area-inset-left, 0px)); padding-right: max(2.5rem, env(safe-area-inset-right, 0px)); } }
+
+.kicker {
+  font-family: var(--mono); font-size: .75rem; letter-spacing: .08em;
+  text-transform: uppercase; color: var(--muted);
+}
+h2 {
+  font-family: var(--display); font-weight: 700; text-transform: uppercase;
+  font-size: clamp(2.4rem, 6vw, 4rem); line-height: .92; letter-spacing: .005em;
+  margin: .35rem 0 0; text-wrap: balance;
+}
+.lede { max-width: 38rem; color: var(--muted); margin: 1rem 0 0; }
+
+/* ---------- top bar ---------- */
+.top { padding-block: 1.25rem; display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap; }
+.mark {
+  font-family: var(--display); font-weight: 900; font-size: 1.5rem; text-decoration: none;
+  border: 2px solid var(--ink); padding: 0 .4rem; line-height: 1.35;
+}
+.clocks { display: flex; gap: 1.25rem; font-family: var(--mono); font-size: .75rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+.clocks b { color: var(--ink); font-weight: 500; }
+.top nav { margin-left: auto; display: flex; gap: 1.25rem; flex-wrap: wrap; font-size: .9rem; }
+.top nav a { text-decoration: none; color: var(--muted); }
+.top nav a:hover { color: var(--ink); }
+.lang { display: inline-flex; border: 1px solid var(--rule); font-family: var(--mono); font-size: .75rem; }
+.lang button {
+  font: inherit; color: var(--muted); background: none; border: 0; padding: .35rem .6rem; cursor: pointer;
+}
+.lang button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+@media (max-width: 760px) { .top nav { display: none; } .lang { margin-left: auto; } }
+
+/* ---------- hero ---------- */
+.hero { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, .85fr); gap: clamp(1.5rem, 4vw, 3.5rem); align-items: end; padding-block: clamp(1.5rem, 5vw, 4rem) 3rem; }
+.hero-text { min-width: 0; }
+.status {
+  display: inline-flex; align-items: center; gap: .55rem; font-family: var(--mono); font-size: .75rem;
+  border: 1px solid var(--rule); background: var(--sheet); padding: .35rem .7rem;
+}
+.status i { width: .5rem; height: .5rem; border-radius: 50%; background: var(--match); box-shadow: 0 0 0 0 var(--match); animation: pulse 2.8s ease-out infinite; }
+@keyframes pulse { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--match) 60%, transparent); } 70%, 100% { box-shadow: 0 0 0 .5rem transparent; } }
+.name {
+  font-family: var(--display); font-weight: 900; text-transform: uppercase;
+  font-size: clamp(3.4rem, 10.2vw, 9.4rem); line-height: .8; letter-spacing: -.005em;
+  margin: 1.5rem 0 0;
+}
+.name .line { display: block; overflow: hidden; padding-bottom: .04em; white-space: nowrap; }
+.name .line + .line { color: var(--blue); }
+.name .ch { display: inline-block; animation: rise .9s cubic-bezier(.2, .8, .2, 1) both; }
+@keyframes rise { from { transform: translateY(105%); } to { transform: none; } }
+.full { font-family: var(--mono); font-size: .8rem; color: var(--muted); margin: 1rem 0 0; }
+.role { font-size: clamp(1.15rem, 2.2vw, 1.45rem); line-height: 1.4; max-width: 34rem; margin: 1.5rem 0 0; text-wrap: pretty; }
+.role em { font-style: normal; background: linear-gradient(transparent 62%, var(--blue-soft) 62%); }
+.cta { display: flex; gap: .75rem; flex-wrap: wrap; margin-top: 2rem; }
+.btn {
+  display: inline-flex; align-items: center; gap: .5rem; font: 500 .95rem var(--body);
+  padding: .7rem 1.1rem; border: 1.5px solid var(--ink); text-decoration: none; cursor: pointer;
+  background: var(--ink); color: var(--paper); transition: transform .2s, background .2s, color .2s;
+}
+.btn:hover { transform: translateY(-2px); }
+.btn.ghost { background: transparent; color: var(--ink); }
+.btn.ghost:hover { background: var(--ink); color: var(--paper); }
+
+.photo { margin: 0; min-width: 0; animation: unveil 1.1s .25s cubic-bezier(.6, 0, .2, 1) both; }
+@keyframes unveil { from { clip-path: inset(100% 0 0 0); } to { clip-path: inset(0 0 0 0); } }
+.photo .frame { position: relative; overflow: hidden; aspect-ratio: 4 / 5; max-width: 100%; background: var(--rule); transition: transform .6s cubic-bezier(.2, .8, .2, 1); will-change: transform; }
+.hero-band { position: relative; isolation: isolate; }
+#field {
+  position: absolute; inset: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none;
+  -webkit-mask-image: linear-gradient(to bottom, #000 65%, transparent); mask-image: linear-gradient(to bottom, #000 65%, transparent);
+}
+.photo img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 62%; transition: transform 1.2s cubic-bezier(.2, .8, .2, 1); }
+.photo:hover img { transform: scale(1.04); }
+.photo figcaption { display: flex; justify-content: space-between; gap: 1rem; padding-top: .6rem; font-family: var(--mono); font-size: .7rem; color: var(--muted); border-top: 1px solid var(--rule); margin-top: .6rem; }
+@media (max-width: 760px) {
+  .hero { grid-template-columns: 1fr; }
+  .name { font-size: 18vw; }
+  .photo { order: -1; max-width: 22rem; }
+  .photo .frame { aspect-ratio: 1 / 1; }
+}
+
+/* ---------- summary strip ---------- */
+.facts { border-block: 1px solid var(--rule); }
+.facts .wrap { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.fact { padding-block: 1.25rem; padding-right: 1rem; min-width: 0; }
+.fact + .fact { border-left: 1px solid var(--rule); padding-left: 1.25rem; }
+.fact b { display: block; font-family: var(--display); font-weight: 700; font-size: 1.6rem; line-height: 1.05; text-transform: uppercase; }
+.fact span { font-size: .85rem; color: var(--muted); }
+@media (max-width: 760px) {
+  .facts .wrap { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .fact:nth-child(3) { border-left: 0; padding-left: 0; }
+  .fact:nth-child(n+3) { border-top: 1px solid var(--rule); }
+}
+
+section { padding-block: clamp(3.5rem, 8vw, 6rem); }
+.sec-head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 1rem 3rem; align-items: end; }
+.sec-head .lede { margin: 0; }
+@media (max-width: 760px) { .sec-head { grid-template-columns: 1fr; } }
+
+/* ---------- reconciliation ---------- */
+.recon { margin-top: 2.5rem; background: var(--sheet); border: 1px solid var(--rule); }
+.recon-bar { display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; padding: .9rem 1.1rem; border-bottom: 1px solid var(--rule); }
+.recon-bar .kicker { margin: 0; }
+.ledgers { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+.ledger { min-width: 0; padding: 1rem 1.1rem 1.2rem; }
+.ledger + .ledger { border-left: 1px dashed var(--rule); }
+.ledger h3 { font: 600 .95rem var(--body); margin: 0 0 .6rem; display: flex; justify-content: space-between; gap: .5rem; }
+.ledger h3 small { font: 400 .7rem var(--mono); color: var(--muted); align-self: center; }
+.rows { list-style: none; margin: 0; padding: 0; font-family: var(--mono); font-size: .8rem; font-variant-numeric: tabular-nums; }
+.rows li {
+  display: grid; grid-template-columns: 3rem minmax(0, 1fr) auto 2.6rem; gap: .6rem; align-items: center;
+  padding: .45rem .4rem; border-bottom: 1px solid var(--rule); transition: background .35s, color .35s;
+}
+.rows .d { color: var(--muted); }
+.rows .t { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.rows .v { text-align: right; }
+.rows .k { text-align: center; font-size: .7rem; border-radius: 2px; }
+.rows li.ok { background: var(--match-soft); }
+.rows li.ok .k { color: var(--match); font-weight: 500; }
+.rows li.miss { background: var(--flag-soft); }
+.rows li.miss .k { color: var(--flag); font-weight: 500; }
+.rows li.scan { background: var(--blue-soft); }
+.rows li.multi { box-shadow: inset 3px 0 0 var(--blue); }
+.rows li.multi .k { color: var(--blue); }
+.rows li.date .d { color: var(--flag); text-decoration: underline dotted; text-underline-offset: 3px; }
+.recon-legend { display: flex; flex-wrap: wrap; gap: .5rem 1.5rem; padding: .8rem 1.1rem; border-top: 1px solid var(--rule); font-size: .85rem; color: var(--muted); }
+.recon-legend > span { display: inline-flex; align-items: center; gap: .45rem; }
+.recon-legend > span::before { content: ""; width: .7rem; height: .7rem; background: var(--match-soft); border: 1px solid var(--match); }
+.recon-legend [data-t="many"]::before { background: var(--blue-soft); border-color: var(--blue); box-shadow: inset 2px 0 0 var(--blue); }
+.recon-legend [data-t="date"]::before { border-style: dotted; border-color: var(--flag); }
+.recon-legend [data-t="none"]::before { background: var(--flag-soft); border-color: var(--flag); }
+.recon-legend b { font-family: var(--mono); font-weight: 500; color: var(--ink); min-width: 1ch; display: inline-block; transition: transform .25s; }
+.recon-legend b.bump { transform: scale(1.5); }
+.recon-foot { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)) minmax(0, 1.4fr); border-top: 1px solid var(--rule); }
+.recon-foot > div { padding: .9rem 1.1rem; min-width: 0; }
+.recon-foot > div + div { border-left: 1px solid var(--rule); }
+.recon-foot .lbl { font-family: var(--mono); font-size: .68rem; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+.recon-foot .num { font-family: var(--mono); font-size: 1.05rem; font-variant-numeric: tabular-nums; margin-top: .15rem; }
+.recon-foot .diff .num { color: var(--flag); font-weight: 500; }
+.recon-foot .note { font-size: .85rem; color: var(--muted); line-height: 1.45; }
+.recon-foot .note strong { color: var(--ink); font-weight: 600; }
+@media (max-width: 760px) {
+  .ledgers { grid-template-columns: 1fr; }
+  .ledger + .ledger { border-left: 0; border-top: 1px dashed var(--rule); }
+  .recon-foot { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .recon-foot .note { grid-column: 1 / -1; border-left: 0 !important; border-top: 1px solid var(--rule); }
+}
+@media (max-width: 460px) { .recon-foot .num { font-size: .85rem; } }
+
+.did { margin-top: 2.5rem; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; border-top: 2px solid var(--ink); }
+.did div { padding: 1.1rem 1.25rem 0 0; min-width: 0; }
+.did h4 { font-family: var(--display); font-weight: 700; font-size: 1.35rem; text-transform: uppercase; margin: 0; line-height: 1.1; }
+.did p { margin: .4rem 0 0; color: var(--muted); font-size: .95rem; }
+@media (max-width: 760px) { .did { grid-template-columns: 1fr; gap: .25rem; } }
+
+/* ---------- pipeline ---------- */
+.dark-band { background: var(--ink); color: var(--paper); }
+.dark-band .kicker, .dark-band .lede { color: color-mix(in srgb, var(--paper) 65%, var(--ink)); }
+.pipe { margin-top: 2.5rem; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: .5rem; }
+.step {
+  text-align: left; font: inherit; color: inherit; cursor: pointer; min-width: 0;
+  background: transparent; border: 1px solid color-mix(in srgb, var(--paper) 22%, var(--ink));
+  padding: 1rem; position: relative; transition: background .25s, border-color .25s;
+}
+.step::after {
+  content: ""; position: absolute; top: 50%; right: -.45rem; width: .4rem; height: 1px;
+  background: color-mix(in srgb, var(--paper) 40%, var(--ink));
+}
+.step:last-child::after { display: none; }
+.step .n { font-family: var(--mono); font-size: .7rem; opacity: .6; }
+.step .s { display: block; font-family: var(--display); font-weight: 700; font-size: 1.7rem; text-transform: uppercase; line-height: 1; margin-top: .4rem; }
+.step .tools { display: block; font-size: .8rem; opacity: .7; margin-top: .4rem; }
+.step:hover { border-color: var(--paper); }
+.step[aria-selected="true"] { background: var(--paper); color: var(--ink); border-color: var(--paper); }
+.step[aria-selected="true"] .tools { opacity: .8; }
+.pipe-detail { margin-top: 1.5rem; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 1rem 3rem; min-height: 7rem; }
+.pipe-detail p { margin: 0; max-width: 36rem; }
+.pipe-detail .where { font-family: var(--mono); font-size: .8rem; color: color-mix(in srgb, var(--paper) 65%, var(--ink)); }
+.pipe-detail .where li { margin-bottom: .35rem; }
+.pipe-detail ul { margin: 0; padding-left: 1rem; }
+@media (max-width: 860px) {
+  .pipe { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .step::after { display: none; }
+  .pipe-detail { grid-template-columns: 1fr; }
+}
+
+/* ---------- projects ---------- */
+.projects { margin-top: 2.5rem; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.25rem; }
+.proj { background: var(--sheet); border: 1px solid var(--rule); padding: 1.4rem 1.4rem 1.5rem; min-width: 0; display: flex; flex-direction: column; gap: .6rem; transition: transform .3s, border-color .3s; }
+.proj:hover { transform: translateY(-3px); border-color: var(--muted); }
+.proj .tag { font-family: var(--mono); font-size: .7rem; text-transform: uppercase; letter-spacing: .06em; color: var(--blue); }
+.proj h3 { font-family: var(--display); font-weight: 700; font-size: 2rem; text-transform: uppercase; line-height: 1; margin: 0; }
+.proj p { margin: 0; color: var(--muted); }
+.chips { display: flex; flex-wrap: wrap; gap: .35rem; margin-top: auto; padding-top: .5rem; }
+.chips span { font-family: var(--mono); font-size: .7rem; border: 1px solid var(--rule); padding: .15rem .5rem; }
+.proj.wide { grid-column: 1 / -1; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 1.5rem 2.5rem; }
+.proj.wide .copy { display: flex; flex-direction: column; gap: .6rem; min-width: 0; }
+@media (max-width: 760px) { .projects { grid-template-columns: 1fr; } .proj.wide { grid-template-columns: 1fr; } }
+
+.sensor { border: 1px solid var(--rule); background: var(--paper); padding: 1rem; display: grid; gap: .9rem; align-content: start; min-width: 0; }
+.sensor .row { display: grid; grid-template-columns: minmax(0, 1fr) 3.2rem; gap: .25rem .75rem; align-items: center; }
+.sensor label { font-size: .85rem; grid-column: 1 / -1; display: flex; justify-content: space-between; }
+.sensor output { font-family: var(--mono); font-size: .8rem; text-align: right; font-variant-numeric: tabular-nums; }
+.sensor input[type="range"] { width: 100%; accent-color: var(--blue); }
+.verdict { display: flex; align-items: center; gap: .6rem; font-family: var(--mono); font-size: .8rem; padding: .6rem .75rem; border: 1px solid var(--rule); transition: background .3s, color .3s, border-color .3s; }
+.fit { border: 1px solid var(--rule); background: var(--paper); padding: 1rem; display: grid; gap: .8rem; align-content: start; min-width: 0; }
+.sports { display: flex; flex-wrap: wrap; gap: .35rem; }
+.sports button { font: 500 .8rem var(--body); color: var(--ink); background: var(--sheet); border: 1px solid var(--rule); padding: .3rem .65rem; cursor: pointer; transition: background .2s, color .2s; }
+.sports button:hover { border-color: var(--muted); }
+.sports button[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.workout { border: 1px solid var(--rule); background: var(--sheet); padding: .9rem 1rem; font-size: .9rem; line-height: 1.5; transition: background .25s, color .25s, font-size .25s; }
+.workout.swap { animation: swapIn .35s ease both; }
+@keyframes swapIn { from { opacity: 0; transform: translateY(6px); } }
+.workout h4 { font-family: var(--display); font-weight: 700; text-transform: uppercase; font-size: 1.55em; line-height: 1; margin: 0; }
+.workout .meta { font-family: var(--mono); font-size: .75em; color: var(--muted); margin-top: .35rem; display: flex; gap: .4rem 1rem; flex-wrap: wrap; }
+.workout .lvl { letter-spacing: .15em; color: var(--blue); }
+.workout ol { margin: .6rem 0 0; padding-left: 1.2rem; }
+.workout li { margin-bottom: .2rem; }
+.verdict i { width: .6rem; height: .6rem; border-radius: 50%; background: currentColor; flex: none; }
+.verdict.ok { color: var(--match); background: var(--match-soft); border-color: transparent; }
+.verdict.go { color: var(--flag); background: var(--flag-soft); border-color: transparent; }
+
+/* ---------- path ---------- */
+.path { margin-top: 2.5rem; list-style: none; padding: 0; display: grid; gap: 0; }
+.path li { display: grid; grid-template-columns: 9rem minmax(0, 1fr) minmax(0, 1.2fr); gap: .25rem 2rem; padding: 1.3rem 0; border-top: 1px solid var(--rule); align-items: baseline; }
+.path li:last-child { border-bottom: 1px solid var(--rule); }
+.path .when { font-family: var(--mono); font-size: .8rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+.path .what { font-family: var(--display); font-weight: 700; font-size: 1.6rem; text-transform: uppercase; line-height: 1.05; }
+.path .detail { color: var(--muted); font-size: .95rem; }
+.path li.now .when { color: var(--blue); }
+.path li.now .when::before { content: "● "; }
+@media (max-width: 760px) { .path li { grid-template-columns: 1fr; } }
+
+/* ---------- languages ---------- */
+.langs { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 2.5rem 4rem; margin-top: 2.5rem; }
+.cefr { min-width: 0; }
+.cefr-scale { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)) 1.3fr; font-family: var(--mono); font-size: .7rem; color: var(--muted); border-bottom: 1px solid var(--ink); padding-bottom: .3rem; }
+.cefr-scale span:last-child { text-align: right; }
+.cefr-row { display: grid; grid-template-columns: 7.5rem minmax(0, 1fr); align-items: center; gap: 1rem; padding-block: .85rem; border-bottom: 1px solid var(--rule); }
+.cefr-row b { font-weight: 600; }
+.cefr-row small { display: block; font-family: var(--mono); font-size: .7rem; color: var(--muted); }
+.track { position: relative; height: .6rem; background: var(--rule); }
+.track span { position: absolute; inset: 0 auto 0 0; background: var(--blue); transform-origin: left; animation: grow 1.2s .3s cubic-bezier(.2, .8, .2, 1) both; }
+@keyframes grow { from { transform: scaleX(0); } }
+.cefr-head { display: grid; grid-template-columns: 7.5rem minmax(0, 1fr); gap: 1rem; }
+.soft h3 { font: 600 1rem var(--body); margin: 0 0 1rem; }
+.soft ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: .5rem; }
+.soft li { border: 1px solid var(--rule); background: var(--sheet); padding: .45rem .8rem; font-size: .95rem; }
+@media (max-width: 760px) { .langs { grid-template-columns: 1fr; } .cefr-head, .cefr-row { grid-template-columns: 5.5rem minmax(0, 1fr); } }
+
+/* ---------- contact ---------- */
+.contact { background: var(--contact); color: #fff; }
+.contact h2 { font-size: clamp(3rem, 10vw, 7.5rem); }
+.contact .lede { color: rgba(255, 255, 255, .8); }
+.contact-grid { margin-top: 2.5rem; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 1px solid rgba(255, 255, 255, .35); }
+.contact-grid > * { padding: 1.2rem 1.2rem 1.2rem 0; min-width: 0; }
+.contact-grid > * + * { border-left: 1px solid rgba(255, 255, 255, .35); padding-left: 1.2rem; }
+.contact .lbl { font-family: var(--mono); font-size: .7rem; text-transform: uppercase; letter-spacing: .08em; opacity: .75; }
+.contact .val { font-size: 1.1rem; margin-top: .3rem; word-break: break-word; user-select: all; }
+.contact a { text-decoration: none; display: block; }
+.contact a .val::after { content: " ↗"; }
+.contact a:hover .val { text-decoration: underline; }
+.copy { font: 500 .75rem var(--mono); background: #fff; color: var(--contact); border: 0; padding: .3rem .6rem; margin-top: .6rem; cursor: pointer; }
+@media (max-width: 760px) {
+  .contact-grid { grid-template-columns: 1fr; }
+  .contact-grid > * + * { border-left: 0; padding-left: 0; border-top: 1px solid rgba(255, 255, 255, .35); }
+}
+footer { padding-block: 1.5rem; font-family: var(--mono); font-size: .7rem; color: var(--muted); display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  html { scroll-behavior: auto; }
+}
+</style>
+</head>
+<body>
+<div id="app" data-lang="pt">
+
+<header class="wrap top">
+  <a class="mark" href="#top" aria-label="Pedro Maricate">PM</a>
+  <div class="clocks" aria-live="off">
+    <span>Heilbronn <b id="clk-de">--:--</b></span>
+    <span><span lang="pt">Brasil</span><span lang="en">Brazil</span> <b id="clk-br">--:--</b></span>
+  </div>
+  <nav>
+    <a href="#kpmg"><span lang="pt">Experiência</span><span lang="en">Experience</span></a>
+    <a href="#ferramentas"><span lang="pt">Ferramentas</span><span lang="en">Toolkit</span></a>
+    <a href="#projetos"><span lang="pt">Projetos</span><span lang="en">Projects</span></a>
+    <a href="#trajetoria"><span lang="pt">Trajetória</span><span lang="en">Path</span></a>
+    <a href="#contato"><span lang="pt">Contato</span><span lang="en">Contact</span></a>
+  </nav>
+  <div class="lang" role="group" aria-label="Idioma / Language">
+    <button type="button" id="btn-pt" data-set="pt" aria-pressed="true">PT</button>
+    <button type="button" id="btn-en" data-set="en" aria-pressed="false">EN</button>
+  </div>
+</header>
+
+<main id="top">
+  <div class="hero-band">
+  <canvas id="field" aria-hidden="true"></canvas>
+  <div class="wrap hero">
+    <div class="hero-text">
+      <span class="status"><i></i>
+        <span lang="pt">Em Heilbronn até fev/2027 · aberto a oportunidades</span>
+        <span lang="en">In Heilbronn until Feb 2027 · open to opportunities</span>
+      </span>
+      <h1 class="name" aria-label="Pedro Maricate">
+        <span class="line" aria-hidden="true">Pedro</span>
+        <span class="line" aria-hidden="true">Maricate</span>
+      </h1>
+      <p class="full">Pedro Almeida Maricate Santos</p>
+      <p class="role">
+        <span lang="pt">Estudante de Sistemas de Informação. Trabalho onde <em>dados, tecnologia e negócios</em> se encontram: automatizo o que é repetitivo e deixo os números fecharem.</span>
+        <span lang="en">Information Systems student. I work where <em>data, technology and business</em> meet: I automate the repetitive parts and make the numbers add up.</span>
+      </p>
+      <div class="cta">
+        <a class="btn" href="#kpmg"><span lang="pt">Ver como eu trabalho</span><span lang="en">See how I work</span> ↓</a>
+        <a class="btn ghost" href="#contato"><span lang="pt">Falar comigo</span><span lang="en">Get in touch</span></a>
+      </div>
+    </div>
+    <figure class="photo">
+      <div class="frame"><img src="pedro.jpg" alt="Pedro na arquibancada da Südkurve, com cachecol do TSG Hoffenheim" width="720" height="1280"></div>
+      <figcaption><span>Südkurve · Sinsheim</span><span>49.24° N, 8.89° E</span></figcaption>
+    </figure>
+  </div>
+  </div>
+
+  <div class="facts">
+    <div class="wrap">
+      <div class="fact"><b>ESPM</b><span lang="pt">Sistemas de Informação, 2024–2027</span><span lang="en">Information Systems, 2024–2027</span></div>
+      <div class="fact"><b>HHN</b><span lang="pt">Heilbronn University, Business Admin.</span><span lang="en">Heilbronn University, Business Admin.</span></div>
+      <div class="fact"><b>KPMG</b><span lang="pt">Deal Advisory &amp; Strategy, 2026</span><span lang="en">Deal Advisory &amp; Strategy, 2026</span></div>
+      <div class="fact"><b>PT · EN · DE</b><span lang="pt">Nativo, avançado, A1.2</span><span lang="en">Native, advanced, A1.2</span></div>
+    </div>
+  </div>
+
+  <!-- KPMG / Cash Proof -->
+  <section id="kpmg">
+    <div class="wrap">
+      <div class="sec-head">
+        <div>
+          <p class="kicker">KPMG · Deal Advisory &amp; Strategy · <span lang="pt">fev–jun 2026</span><span lang="en">Feb–Jun 2026</span></p>
+          <h2><span lang="pt">Cash Proof, em miniatura</span><span lang="en">Cash Proof, in miniature</span></h2>
+        </div>
+        <p class="lede">
+          <span lang="pt">Na KPMG eu conciliava o que entrou e saiu do caixa com o que o cliente reportou. Em escala, isso são milhares de linhas. Aqui são treze: aperte o botão e veja a lógica. Repare no recebimento da Beta: um valor no banco, três lançamentos no relatório.</span>
+          <span lang="en">At KPMG I reconciled cash movements against what clients reported. At scale that means thousands of rows. Here there are thirteen: press the button and watch the logic. Look at the Beta receipt: one amount in the bank, three entries in the report.</span>
+        </p>
+      </div>
+
+      <div class="recon" id="recon">
+        <div class="recon-bar">
+          <p class="kicker"><span lang="pt">Dados fictícios · fevereiro</span><span lang="en">Sample data · February</span></p>
+          <button class="btn" type="button" id="run-recon"><span lang="pt">Conciliar</span><span lang="en">Reconcile</span></button>
+        </div>
+        <div class="ledgers">
+          <div class="ledger">
+            <h3><span lang="pt">Extrato bancário</span><span lang="en">Bank statement</span><small>R$</small></h3>
+            <ul class="rows" id="bank"></ul>
+          </div>
+          <div class="ledger">
+            <h3><span lang="pt">Relatório do cliente</span><span lang="en">Client report</span><small>R$</small></h3>
+            <ul class="rows" id="book"></ul>
+          </div>
+        </div>
+        <div class="recon-legend" id="legend">
+          <span data-t="one"><b>0</b><span lang="pt">1 para 1</span><span lang="en">1 to 1</span></span>
+          <span data-t="many"><b>0</b><span lang="pt">1 para N (soma de lançamentos)</span><span lang="en">1 to N (sum of entries)</span></span>
+          <span data-t="date"><b>0</b><span lang="pt">diferença de data</span><span lang="en">timing difference</span></span>
+          <span data-t="none"><b>0</b><span lang="pt">sem par</span><span lang="en">unmatched</span></span>
+        </div>
+        <div class="recon-foot">
+          <div><div class="lbl"><span lang="pt">Extrato</span><span lang="en">Bank</span></div><div class="num" id="tot-bank">–</div></div>
+          <div><div class="lbl"><span lang="pt">Relatório</span><span lang="en">Report</span></div><div class="num" id="tot-book">–</div></div>
+          <div class="diff"><div class="lbl"><span lang="pt">Diferença</span><span lang="en">Difference</span></div><div class="num" id="tot-diff">–</div></div>
+          <div class="note" id="recon-note">
+            <span lang="pt">Aguardando conciliação.</span><span lang="en">Waiting to reconcile.</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="did">
+        <div>
+          <h4>Alteryx</h4>
+          <p lang="pt">Fluxos para tratar, cruzar e automatizar análises de dados que antes eram feitas à mão.</p>
+          <p lang="en">Workflows to clean, blend and automate data analyses that used to be done by hand.</p>
+        </div>
+        <div>
+          <h4>Python</h4>
+          <p lang="pt">Scripts que extraem e estruturam dados de documentos em PDF, prontos para análise.</p>
+          <p lang="en">Scripts that extract and structure data from PDF documents, ready for analysis.</p>
+        </div>
+        <div>
+          <h4>Excel</h4>
+          <p lang="pt">Análise, organização e conciliação de grandes volumes de dados financeiros.</p>
+          <p lang="en">Analysis, organisation and reconciliation of large volumes of financial data.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Toolkit -->
+  <section id="ferramentas" class="dark-band">
+    <div class="wrap">
+      <div class="sec-head">
+        <div>
+          <p class="kicker"><span lang="pt">Ferramentas, na ordem em que entram</span><span lang="en">Tools, in the order they come in</span></p>
+          <h2><span lang="pt">Do PDF ao painel</span><span lang="en">From PDF to dashboard</span></h2>
+        </div>
+        <p class="lede">
+          <span lang="pt">Cada ferramenta resolve uma etapa do caminho de um dado bruto até uma decisão. Toque numa etapa.</span>
+          <span lang="en">Each tool handles one stage on the way from raw data to a decision. Tap a stage.</span>
+        </p>
+      </div>
+      <div class="pipe" role="tablist" aria-label="Pipeline">
+        <button class="step" role="tab" id="step-0" data-i="0" aria-selected="true"><span class="n">1</span><span class="s"><span lang="pt">Extrair</span><span lang="en">Extract</span></span><span class="tools">Python</span></button>
+        <button class="step" role="tab" id="step-1" data-i="1" aria-selected="false"><span class="n">2</span><span class="s"><span lang="pt">Tratar</span><span lang="en">Transform</span></span><span class="tools">Alteryx · SQL</span></button>
+        <button class="step" role="tab" id="step-2" data-i="2" aria-selected="false"><span class="n">3</span><span class="s"><span lang="pt">Analisar</span><span lang="en">Analyse</span></span><span class="tools">Excel · RapidMiner</span></button>
+        <button class="step" role="tab" id="step-3" data-i="3" aria-selected="false"><span class="n">4</span><span class="s"><span lang="pt">Visualizar</span><span lang="en">Visualise</span></span><span class="tools">Power BI · Tableau</span></button>
+        <button class="step" role="tab" id="step-4" data-i="4" aria-selected="false"><span class="n">5</span><span class="s"><span lang="pt">Desenhar</span><span lang="en">Design</span></span><span class="tools">UX/UI</span></button>
+      </div>
+      <div class="pipe-detail" id="pipe-detail" role="tabpanel" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <!-- Projects -->
+  <section id="projetos">
+    <div class="wrap">
+      <div class="sec-head">
+        <div>
+          <p class="kicker"><span lang="pt">Projetos e atividades acadêmicas</span><span lang="en">Projects &amp; academic work</span></p>
+          <h2><span lang="pt">Fora da planilha</span><span lang="en">Off the spreadsheet</span></h2>
+        </div>
+        <p class="lede">
+          <span lang="pt">Laboratório de dados, hackathon e dois produtos feitos em equipe na ESPM.</span>
+          <span lang="en">A data lab, a hackathon and two products built as a team at ESPM.</span>
+        </p>
+      </div>
+
+      <div class="projects">
+        <article class="proj wide">
+          <div class="copy">
+            <span class="tag"><span lang="pt">Projeto · IoT</span><span lang="en">Project · IoT</span></span>
+            <h3>Toilet View</h3>
+            <p lang="pt">Sistema de monitoramento de banheiros com sensores de odor e ocupação. Ele indica em tempo real quando é preciso limpar, e a equipe só é acionada quando necessário. Menos rondas à toa, mais higiene.</p>
+            <p lang="en">A restroom monitoring system with odour and occupancy sensors. It shows in real time when cleaning is needed, so staff are dispatched only when necessary. Fewer wasted rounds, better hygiene.</p>
+            <div class="chips"><span lang="pt">sensores</span><span lang="en">sensors</span><span lang="pt">tempo real</span><span lang="en">real time</span><span lang="pt">eficiência operacional</span><span lang="en">operational efficiency</span></div>
+          </div>
+          <div class="sensor" aria-label="Simulador Toilet View">
+            <span class="kicker"><span lang="pt">Simulador · mova os sensores</span><span lang="en">Simulator · move the sensors</span></span>
+            <div class="row">
+              <label for="odor"><span lang="pt">Índice de odor</span><span lang="en">Odour index</span></label>
+              <input type="range" id="odor" min="0" max="100" value="34">
+              <output id="odor-out" for="odor">34</output>
+            </div>
+            <div class="row">
+              <label for="uses"><span lang="pt">Usos desde a última limpeza</span><span lang="en">Uses since last cleaning</span></label>
+              <input type="range" id="uses" min="0" max="80" value="22">
+              <output id="uses-out" for="uses">22</output>
+            </div>
+            <div class="verdict ok" id="verdict"><i></i><span id="verdict-txt"></span></div>
+          </div>
+        </article>
+
+        <article class="proj">
+          <span class="tag"><span lang="pt">ESPM · 1 ano e meio</span><span lang="en">ESPM · 1.5 years</span></span>
+          <h3>Martech</h3>
+          <p lang="pt">Laboratório de Análise de Dados da ESPM. Análise de casos reais com Tableau, Tableau Prep Builder e RapidMiner (IA).</p>
+          <p lang="en">ESPM's Data Analytics Lab. Analysed real-world cases with Tableau, Tableau Prep Builder and RapidMiner (AI).</p>
+          <div class="chips"><span>Tableau</span><span>Tableau Prep</span><span>RapidMiner</span></div>
+        </article>
+
+        <article class="proj">
+          <span class="tag">Hackathon</span>
+          <h3>Hackathon Ambev</h3>
+          <p lang="pt">Resolução, em equipe e contra o relógio, de cases de negócio propostos pela Ambev.</p>
+          <p lang="en">Solving business cases set by Ambev, as a team and against the clock.</p>
+          <div class="chips"><span lang="pt">cases de negócio</span><span lang="en">business cases</span><span lang="pt">equipe</span><span lang="en">teamwork</span></div>
+        </article>
+
+        <article class="proj wide">
+          <div class="copy">
+            <span class="tag"><span lang="pt">Projeto · Web</span><span lang="en">Project · Web</span></span>
+            <h3>Let’s Fit</h3>
+            <p lang="pt">Site gratuito, feito em grupo, onde qualquer pessoa consulta e publica treinos de vários esportes. A ideia é acessibilidade financeira: exercícios para fazer em casa, na rua ou na praça, sem pagar mensalidade de academia.</p>
+            <p lang="en">A free website, built as a group, where anyone can find and post workouts across many sports. The idea is financial accessibility: exercises you can do at home, on the street or in a park, without paying for a gym membership.</p>
+            <div class="chips"><span>UX/UI</span><span lang="pt">acessibilidade financeira</span><span lang="en">financial accessibility</span><span lang="pt">treino sem academia</span><span lang="en">no-gym training</span><span lang="pt">desenvolvimento web</span><span lang="en">web development</span></div>
+          </div>
+          <div class="fit" aria-label="Prévia Let’s Fit">
+            <span class="kicker"><span lang="pt">Prévia · escolha um esporte</span><span lang="en">Preview · pick a sport</span></span>
+            <div class="sports" id="sports"></div>
+            <div class="workout" id="workout" aria-live="polite"></div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Path -->
+  <section id="trajetoria" style="padding-top:0">
+    <div class="wrap">
+      <p class="kicker"><span lang="pt">Formação e experiência</span><span lang="en">Education &amp; experience</span></p>
+      <h2><span lang="pt">Trajetória</span><span lang="en">Path so far</span></h2>
+      <ol class="path">
+        <li class="now">
+          <span class="when"><span lang="pt">2026 – fev/2027</span><span lang="en">2026 – Feb 2027</span></span>
+          <span class="what">Heilbronn University</span>
+          <span class="detail"><span lang="pt">Intercâmbio acadêmico em Business Administration and Management, na Alemanha.</span><span lang="en">Academic exchange in Business Administration and Management, Germany.</span></span>
+        </li>
+        <li>
+          <span class="when"><span lang="pt">fev – jun 2026</span><span lang="en">Feb – Jun 2026</span></span>
+          <span class="what">KPMG</span>
+          <span class="detail"><span lang="pt">Estágio em Advisory, Deal Advisory &amp; Strategy. Cash Proof e automação de processos. Encerrado por causa do intercâmbio.</span><span lang="en">Advisory intern, Deal Advisory &amp; Strategy. Cash Proof and process automation. Concluded for the exchange in Germany.</span></span>
+        </li>
+        <li>
+          <span class="when"><span lang="pt">1 ano e meio</span><span lang="en">1.5 years</span></span>
+          <span class="what">Martech · ESPM</span>
+          <span class="detail"><span lang="pt">Laboratório de Análise de Dados: Tableau, Tableau Prep Builder e RapidMiner.</span><span lang="en">Data Analytics Lab: Tableau, Tableau Prep Builder and RapidMiner.</span></span>
+        </li>
+        <li>
+          <span class="when">2024 – 2027</span>
+          <span class="what">ESPM</span>
+          <span class="detail"><span lang="pt">Bacharelado em Sistemas de Informação.</span><span lang="en">Bachelor's in Information Systems.</span></span>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- Languages + soft skills -->
+  <section style="padding-top:0">
+    <div class="wrap">
+      <p class="kicker"><span lang="pt">Idiomas no Quadro Europeu (QECR)</span><span lang="en">Languages on the CEFR scale</span></p>
+      <h2><span lang="pt">Três idiomas, um em obra</span><span lang="en">Three languages, one under construction</span></h2>
+      <div class="langs">
+        <div class="cefr">
+          <div class="cefr-head"><span></span><div class="cefr-scale"><span>A1</span><span>A2</span><span>B1</span><span>B2</span><span>C1</span><span>C2</span><span lang="pt">nativo</span><span lang="en">native</span></div></div>
+          <div class="cefr-row"><div><b lang="pt">Português</b><b lang="en">Portuguese</b><small lang="pt">nativo</small><small lang="en">native</small></div><div class="track"><span style="width:100%"></span></div></div>
+          <div class="cefr-row"><div><b lang="pt">Inglês</b><b lang="en">English</b><small lang="pt">avançado</small><small lang="en">advanced</small></div><div class="track"><span style="width:66%"></span></div></div>
+          <div class="cefr-row"><div><b lang="pt">Alemão</b><b lang="en">German</b><small lang="pt">cursando A1.2</small><small lang="en">studying A1.2</small></div><div class="track"><span style="width:11%"></span></div></div>
+        </div>
+        <div class="soft">
+          <h3 lang="pt">Como eu trabalho em equipe</h3>
+          <h3 lang="en">How I work with a team</h3>
+          <ul lang="pt"><li>Empatia</li><li>Boa comunicação</li><li>Foco</li><li>Trabalho em equipe</li><li>Proatividade</li><li>Adaptabilidade</li><li>Vivência internacional</li></ul>
+          <ul lang="en"><li>Empathy</li><li>Clear communication</li><li>Focus</li><li>Teamwork</li><li>Proactivity</li><li>Adaptability</li><li>International experience</li></ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contato" class="contact">
+    <div class="wrap">
+      <p class="kicker" style="color:rgba(255,255,255,.75)"><span lang="pt">Contato</span><span lang="en">Contact</span></p>
+      <h2><span lang="pt">Vamos conversar</span><span lang="en">Let's talk</span></h2>
+      <p class="lede">
+        <span lang="pt">Procuro oportunidades em dados, tecnologia e negócios, na Alemanha ou no Brasil.</span>
+        <span lang="en">I'm looking for opportunities in data, technology and business, in Germany or Brazil.</span>
+      </p>
+      <div class="contact-grid">
+        <div>
+          <div class="lbl">E-mail</div>
+          <div class="val" id="email">pamaricates@gmail.com</div>
+          <button class="copy" type="button" id="copy-email"><span lang="pt">Copiar e-mail</span><span lang="en">Copy email</span></button>
+        </div>
+        <a href="https://github.com/PedroMaricate" target="_blank" rel="noopener">
+          <div class="lbl">GitHub</div>
+          <div class="val">PedroMaricate</div>
+        </a>
+        <!-- Troque pelo link direto do seu perfil (linkedin.com/in/...) -->
+        <a href="https://www.linkedin.com/search/results/people/?keywords=Pedro%20Almeida%20Maricate%20Santos" target="_blank" rel="noopener">
+          <div class="lbl">LinkedIn</div>
+          <div class="val">Pedro Almeida Maricate Santos</div>
+        </a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="wrap">
+  <span>Pedro Almeida Maricate Santos · 2026</span>
+  <span>Heilbronn · São Paulo</span>
+</footer>
+</div>
+
+<script>
+(function () {
+  var app = document.getElementById('app');
+  var lang = 'pt';
+
+  /* ---------- language ---------- */
+  try {
+    var saved = localStorage.getItem('pm-lang');
+    if (saved === 'pt' || saved === 'en') lang = saved;
+    else if (!/^pt/i.test(navigator.language || '')) lang = 'en';
+  } catch (e) { if (!/^pt/i.test(navigator.language || '')) lang = 'en'; }
+
+  function setLang(l) {
+    lang = l;
+    app.setAttribute('data-lang', l);
+    document.documentElement.lang = l === 'pt' ? 'pt-BR' : 'en';
+    document.querySelectorAll('.lang button').forEach(function (b) {
+      b.setAttribute('aria-pressed', String(b.dataset.set === l));
+    });
+    try { localStorage.setItem('pm-lang', l); } catch (e) {}
+    renderLedgers(); renderStep(); renderSensor(); renderTotals(); renderLegend(); renderFit();
+  }
+  document.querySelectorAll('.lang button').forEach(function (b) {
+    b.addEventListener('click', function () { setLang(b.dataset.set); });
+  });
+
+  /* ---------- hero letters ---------- */
+  document.querySelectorAll('.name .line').forEach(function (line, li) {
+    var txt = line.textContent;
+    line.textContent = '';
+    for (var i = 0; i < txt.length; i++) {
+      var s = document.createElement('span');
+      s.className = 'ch';
+      s.textContent = txt[i];
+      s.style.animationDelay = (li * 0.18 + i * 0.035) + 's';
+      line.appendChild(s);
+    }
+  });
+
+  /* ---------- clocks ---------- */
+  function tick() {
+    var o = { hour: '2-digit', minute: '2-digit', hour12: false };
+    try {
+      document.getElementById('clk-de').textContent = new Intl.DateTimeFormat('de-DE', Object.assign({ timeZone: 'Europe/Berlin' }, o)).format(new Date());
+      document.getElementById('clk-br').textContent = new Intl.DateTimeFormat('pt-BR', Object.assign({ timeZone: 'America/Sao_Paulo' }, o)).format(new Date());
+    } catch (e) {}
+  }
+  tick(); setInterval(tick, 15000);
+
+  /* ---------- reconciliation ---------- */
+  var bank = [
+    { id: 'b1', d: '03/02', pt: 'Recebimento cliente Alfa', en: 'Receipt, client Alfa', v: 48250.00, m: 'A', t: 'one' },
+    { id: 'b2', d: '07/02', pt: 'Pagamento fornecedor', en: 'Supplier payment', v: -12430.50, m: 'B', t: 'date' },
+    { id: 'b3', d: '12/02', pt: 'Folha de pagamento', en: 'Payroll', v: -21900.00, m: 'C', t: 'one' },
+    { id: 'b4', d: '18/02', pt: 'Recebimento cliente Beta', en: 'Receipt, client Beta', v: 15780.00, m: 'D', t: 'many' },
+    { id: 'b5', d: '25/02', pt: 'Tarifa bancária', en: 'Bank fee', v: -89.90, m: null, t: 'none' },
+    { id: 'b6', d: '28/02', pt: 'Recebimento cliente Gama', en: 'Receipt, client Gama', v: 9310.00, m: 'E', t: 'one' }
+  ];
+  var book = [
+    { id: 'r1', d: '03/02', pt: 'Receita · Alfa', en: 'Revenue · Alfa', v: 48250.00, m: 'A' },
+    { id: 'r2', d: '06/02', pt: 'Fornecedores', en: 'Suppliers', v: -12430.50, m: 'B' },
+    { id: 'r3', d: '12/02', pt: 'Salários', en: 'Salaries', v: -21900.00, m: 'C' },
+    { id: 'r4', d: '18/02', pt: 'Beta · NF 1041', en: 'Beta · invoice 1041', v: 2350.00, m: 'D' },
+    { id: 'r5', d: '18/02', pt: 'Beta · NF 1047', en: 'Beta · invoice 1047', v: 3430.00, m: 'D' },
+    { id: 'r6', d: '18/02', pt: 'Beta · NF 1052', en: 'Beta · invoice 1052', v: 10000.00, m: 'D' },
+    { id: 'r7', d: '28/02', pt: 'Receita · Gama', en: 'Revenue · Gama', v: 9310.00, m: 'E' }
+  ];
+  var state = {}; // id -> { c: class, k: key label }
+  var counts = { one: 0, many: 0, date: 0, none: 0 };
+  var done = false, running = false, live = '';
+
+  function money(v) {
+    return new Intl.NumberFormat(lang === 'pt' ? 'pt-BR' : 'en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(v);
+  }
+  function rowHTML(r) {
+    var st = state[r.id] || {};
+    return '<li id="' + r.id + '" class="' + (st.c || '') + '"><span class="d">' + r.d + '</span><span class="t">' + r[lang] +
+      '</span><span class="v">' + money(r.v) + '</span><span class="k">' + (st.k || '') + '</span></li>';
+  }
+  function renderLedgers() {
+    document.getElementById('bank').innerHTML = bank.map(rowHTML).join('');
+    document.getElementById('book').innerHTML = book.map(rowHTML).join('');
+  }
+  function renderLegend(bump) {
+    document.querySelectorAll('#legend [data-t]').forEach(function (el) {
+      var b = el.querySelector('b'), t = el.dataset.t;
+      b.textContent = counts[t];
+      if (bump === t) { b.classList.add('bump'); setTimeout(function () { b.classList.remove('bump'); }, 250); }
+    });
+  }
+  function sum(a) { return a.reduce(function (s, r) { return s + r.v; }, 0); }
+  var note = {
+    pt: { wait: 'Aguardando conciliação.', run: 'Cruzando lançamentos por valor e data…',
+      done: '<strong>Diferença de R$ 89,90, toda explicada.</strong> O recebimento da Beta (15.780,00) bate com a soma de três notas fiscais, um caso 1 para N que aparece o tempo todo. O pagamento ao fornecedor caiu no banco um dia depois (06/02 × 07/02). A tarifa bancária não foi lançada pelo cliente e vira ajuste.' },
+    en: { wait: 'Waiting to reconcile.', run: 'Matching entries by amount and date…',
+      done: '<strong>R$ 89.90 difference, fully explained.</strong> The Beta receipt (15,780.00) matches the sum of three invoices, a one-to-many case that comes up all the time. The supplier payment cleared the bank one day later (06/02 vs 07/02). The bank fee was never booked by the client and needs an adjustment.' }
+  };
+  function renderTotals() {
+    var nb = document.getElementById('tot-bank'), nr = document.getElementById('tot-book'), nd = document.getElementById('tot-diff');
+    var n = document.getElementById('recon-note');
+    if (!done) {
+      nb.textContent = nr.textContent = nd.textContent = '–';
+      n.innerHTML = note[lang][running ? 'run' : 'wait'] + (running && live ? '<br><strong>' + live + '</strong>' : '');
+      return;
+    }
+    nb.textContent = money(sum(bank)); nr.textContent = money(sum(book)); nd.textContent = money(sum(bank) - sum(book));
+    n.innerHTML = note[lang].done;
+  }
+  function wait(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
+  async function runRecon() {
+    if (running) return;
+    var btn = document.getElementById('run-recon');
+    state = {}; counts = { one: 0, many: 0, date: 0, none: 0 };
+    done = false; running = true; live = '';
+    renderLedgers(); renderTotals(); renderLegend();
+    var gap = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 320;
+    for (var i = 0; i < bank.length; i++) {
+      var b = bank[i];
+      var hits = book.filter(function (x) { return b.m && x.m === b.m; });
+      state[b.id] = { c: 'scan' }; renderLedgers();
+      await wait(gap);
+      if (b.t === 'many') {
+        // one bank line against several report lines: add them up until they close
+        var acc = 0, parts = [];
+        for (var j = 0; j < hits.length; j++) {
+          acc += hits[j].v; parts.push(money(hits[j].v));
+          state[hits[j].id] = { c: 'scan multi', k: '+' };
+          live = parts.join(' + ') + ' = ' + money(acc) + (Math.abs(acc - b.v) < 0.005 ? ' ✓' : '  ≠ ' + money(b.v));
+          renderLedgers(); renderTotals();
+          await wait(gap * 2);
+        }
+        hits.forEach(function (h, n) { state[h.id] = { c: 'ok multi', k: b.m + '·' + (n + 1) }; });
+        state[b.id] = { c: 'ok multi', k: b.m + '×' + hits.length };
+      } else if (hits.length) {
+        var c = 'ok' + (b.t === 'date' ? ' date' : '');
+        state[b.id] = { c: c, k: b.m }; state[hits[0].id] = { c: c, k: b.m };
+      } else {
+        state[b.id] = { c: 'miss', k: '!' };
+      }
+      counts[b.t]++;
+      renderLedgers(); renderLegend(b.t); renderTotals();
+      await wait(gap / 2);
+    }
+    running = false; done = true; live = ''; renderTotals();
+    btn.innerHTML = '<span lang="pt">Refazer</span><span lang="en">Run again</span>';
+  }
+  document.getElementById('run-recon').addEventListener('click', runRecon);
+
+  /* ---------- pipeline ---------- */
+  var steps = {
+    pt: [
+      ['Muita informação financeira chega trancada em PDF. Escrevo scripts em Python que leem esses documentos e devolvem tabelas limpas e estruturadas.', ['KPMG · extração de dados de PDFs', 'Automação de tarefas repetitivas']],
+      ['Com os dados extraídos, monto fluxos no Alteryx para tratar, cruzar e padronizar bases. Consultas SQL quando os dados moram num banco.', ['KPMG · fluxos de tratamento e cruzamento', 'ESPM · Banco de Dados e SQL']],
+      ['Excel para conciliar e investigar grandes volumes. RapidMiner quando o caso pede um modelo de IA.', ['KPMG · conciliação de dados financeiros', 'Martech · RapidMiner em casos reais']],
+      ['Transformo a análise em painéis que outras pessoas conseguem ler e usar para decidir.', ['Martech · Tableau e Tableau Prep Builder', 'Power BI']],
+      ['Uma boa interface faz a análise chegar em quem precisa. Penso em UX/UI desde o começo.', ['Let’s Fit · treinos gratuitos, sem academia', 'Toilet View · painel de status em tempo real']]
+    ],
+    en: [
+      ['A lot of financial information arrives locked inside PDFs. I write Python scripts that read those documents and return clean, structured tables.', ['KPMG · PDF data extraction', 'Automating repetitive tasks']],
+      ['Once extracted, I build Alteryx workflows to clean, blend and standardise datasets. SQL queries when the data lives in a database.', ['KPMG · cleaning and blending workflows', 'ESPM · Databases and SQL']],
+      ['Excel to reconcile and investigate large volumes. RapidMiner when a case calls for an AI model.', ['KPMG · financial data reconciliation', 'Martech · RapidMiner on real cases']],
+      ['I turn the analysis into dashboards other people can read and act on.', ['Martech · Tableau and Tableau Prep Builder', 'Power BI']],
+      ['A good interface gets the analysis to the people who need it. I think about UX/UI from the start.', ['Let’s Fit · free, no-gym workouts', 'Toilet View · real-time status panel']]
+    ]
+  };
+  var cur = 0;
+  function renderStep() {
+    var s = steps[lang][cur];
+    document.getElementById('pipe-detail').innerHTML = '<p>' + s[0] + '</p><ul class="where">' +
+      s[1].map(function (w) { return '<li>' + w + '</li>'; }).join('') + '</ul>';
+    document.querySelectorAll('.step').forEach(function (b) { b.setAttribute('aria-selected', String(+b.dataset.i === cur)); });
+  }
+  document.querySelectorAll('.step').forEach(function (b) {
+    b.addEventListener('click', function () { cur = +b.dataset.i; renderStep(); });
+    b.addEventListener('keydown', function (e) {
+      if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+      cur = (cur + (e.key === 'ArrowRight' ? 1 : 4)) % 5; renderStep();
+      document.getElementById('step-' + cur).focus();
+    });
+  });
+
+  /* ---------- toilet view ---------- */
+  var odor = document.getElementById('odor'), uses = document.getElementById('uses');
+  function renderSensor() {
+    var o = +odor.value, u = +uses.value;
+    document.getElementById('odor-out').textContent = o;
+    document.getElementById('uses-out').textContent = u;
+    var go = o >= 70 || u >= 50;
+    var v = document.getElementById('verdict');
+    v.className = 'verdict ' + (go ? 'go' : 'ok');
+    document.getElementById('verdict-txt').textContent = go
+      ? (lang === 'pt' ? 'Limpeza necessária · equipe acionada' : 'Cleaning needed · staff dispatched')
+      : (lang === 'pt' ? 'Tudo certo · ninguém precisa ir' : 'All clear · no one needs to go');
+  }
+  odor.addEventListener('input', renderSensor);
+  uses.addEventListener('input', renderSensor);
+
+  /* ---------- let's fit preview ---------- */
+  var sports = [
+    { pt: 'Corrida', en: 'Running', min: 30, lvl: 1,
+      w: { pt: ['Trote intervalado', ['10 min de caminhada rápida', '6× (1 min de trote + 2 min caminhando)', '5 min de alongamento']],
+           en: ['Easy intervals', ['10 min brisk walk', '6× (1 min jog + 2 min walk)', '5 min stretching']] } },
+    { pt: 'Futebol', en: 'Football', min: 25, lvl: 2,
+      w: { pt: ['Agilidade com bola', ['5 min de condução em zigue-zague', '4× 10 passes na parede, com cada pé', '6 tiros de 20 m com 40 s de pausa']],
+           en: ['Ball agility', ['5 min zig-zag dribbling', '4× 10 wall passes, each foot', '6× 20 m sprints, 40 s rest']] } },
+    { pt: 'Natação', en: 'Swimming', min: 35, lvl: 2,
+      w: { pt: ['Base aeróbica', ['200 m de aquecimento em nado livre', '8× 50 m com 20 s de pausa', '100 m soltando']],
+           en: ['Aerobic base', ['200 m freestyle warm-up', '8× 50 m with 20 s rest', '100 m easy cool-down']] } },
+    { pt: 'Funcional', en: 'Bodyweight', min: 20, lvl: 1,
+      w: { pt: ['Corpo todo, sem equipamento', ['3 rodadas de 12 agachamentos', '8 flexões (vale apoiar os joelhos)', '30 s de prancha, 1 min de descanso']],
+           en: ['Full body, no equipment', ['3 rounds of 12 squats', '8 push-ups (knees down is fine)', '30 s plank, 1 min rest']] } },
+    { pt: 'Ciclismo', en: 'Cycling', min: 45, lvl: 3,
+      w: { pt: ['Subidas curtas', ['10 min de giro leve', '5× 2 min de subida forte, descendo em giro leve', '10 min de volta à calma']],
+           en: ['Short climbs', ['10 min easy spin', '5× 2 min hard climb, easy spin down', '10 min cool-down']] } }
+  ];
+  var fitCur = 0;
+  var lvlName = { pt: ['', 'iniciante', 'intermediário', 'avançado'], en: ['', 'beginner', 'intermediate', 'advanced'] };
+  function renderFit(swap) {
+    document.getElementById('sports').innerHTML = sports.map(function (sp, i) {
+      return '<button type="button" data-i="' + i + '" aria-pressed="' + (i === fitCur) + '">' + sp[lang] + '</button>';
+    }).join('');
+    var sp = sports[fitCur], w = sp.w[lang], el = document.getElementById('workout');
+    el.innerHTML = '<h4>' + w[0] + '</h4><div class="meta"><span>' + sp.min + ' min</span><span><span class="lvl">' +
+      '●●●'.slice(0, sp.lvl) + '○○○'.slice(0, 3 - sp.lvl) + '</span> ' + lvlName[lang][sp.lvl] + '</span><span>' +
+      (lang === 'pt' ? 'exemplo' : 'example') + '</span></div><ol>' +
+      w[1].map(function (x) { return '<li>' + x + '</li>'; }).join('') + '</ol>';
+    if (swap) { el.classList.remove('swap'); void el.offsetWidth; el.classList.add('swap'); }
+  }
+  document.getElementById('sports').addEventListener('click', function (e) {
+    var b = e.target.closest('button');
+    if (!b) return;
+    fitCur = +b.dataset.i; renderFit(true);
+  });
+
+  /* ---------- copy email ---------- */
+  document.getElementById('copy-email').addEventListener('click', function () {
+    var btn = this, el = document.getElementById('email');
+    function ok() {
+      var old = btn.innerHTML;
+      btn.textContent = lang === 'pt' ? 'Copiado' : 'Copied';
+      setTimeout(function () { btn.innerHTML = old; }, 1800);
+    }
+    function fallback() {
+      var r = document.createRange(); r.selectNodeContents(el);
+      var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(el.textContent).then(ok, fallback);
+    else fallback();
+  });
+
+  /* ---------- cursor field (hero) ---------- */
+  (function () {
+    var band = document.querySelector('.hero-band'), cv = document.getElementById('field');
+    var frame = document.querySelector('.photo .frame');
+    if (!band || !cv || !cv.getContext) return;
+    var ctx = cv.getContext('2d'), W = 0, H = 0;
+    var mx = 0, my = 0, ex = 0, ey = 0, energy = 0, inside = false, raf = 0;
+    var GAP = 26, R = 160;
+    function draw() {
+      var cs = getComputedStyle(document.documentElement);
+      var base = cs.getPropertyValue('--rule').trim(), hot = cs.getPropertyValue('--blue').trim();
+      ctx.clearRect(0, 0, W, H);
+      var ox = (W % GAP) / 2;
+      for (var y = GAP / 2; y < H; y += GAP) {
+        for (var x = ox; x < W; x += GAP) {
+          var dx = x - ex, dy = y - ey, d = Math.sqrt(dx * dx + dy * dy) || 1;
+          var f = d < R ? 1 - d / R : 0; f = f * f * energy;
+          ctx.fillStyle = f > 0.03 ? hot : base;
+          ctx.globalAlpha = f > 0.03 ? 0.35 + 0.65 * f : 1;
+          ctx.beginPath();
+          ctx.arc(x + dx / d * f * 18, y + dy / d * f * 18, 1.1 + f * 1.9, 0, 6.2832);
+          ctx.fill();
+        }
+      }
+      ctx.globalAlpha = 1;
+    }
+    function size() {
+      var r = band.getBoundingClientRect(), dpr = Math.min(window.devicePixelRatio || 1, 2);
+      W = r.width; H = r.height;
+      cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      draw();
+    }
+    function loop() {
+      ex += (mx - ex) * 0.15; ey += (my - ey) * 0.15;
+      energy += ((inside ? 1 : 0) - energy) * 0.08;
+      draw();
+      raf = (inside || energy > 0.01) ? requestAnimationFrame(loop) : 0;
+    }
+    size();
+    if (window.ResizeObserver) new ResizeObserver(size).observe(band); else window.addEventListener('resize', size);
+    var mq = window.matchMedia('(prefers-color-scheme: dark)');
+    if (mq.addEventListener) mq.addEventListener('change', draw);
+
+    var fine = window.matchMedia('(pointer: fine)').matches;
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!fine || reduce) return;
+    band.addEventListener('pointermove', function (e) {
+      var r = band.getBoundingClientRect();
+      mx = e.clientX - r.left; my = e.clientY - r.top;
+      if (!inside && energy < 0.01) { ex = mx; ey = my; }
+      inside = true;
+      if (!raf) raf = requestAnimationFrame(loop);
+      if (frame) {
+        var p = frame.getBoundingClientRect();
+        var nx = (e.clientX - (p.left + p.width / 2)) / r.width, ny = (e.clientY - (p.top + p.height / 2)) / r.height;
+        frame.style.transform = 'perspective(900px) rotateY(' + (nx * 7).toFixed(2) + 'deg) rotateX(' + (-ny * 7).toFixed(2) + 'deg)';
+      }
+    });
+    band.addEventListener('pointerleave', function () {
+      inside = false;
+      if (!raf) raf = requestAnimationFrame(loop);
+      if (frame) frame.style.transform = '';
+    });
+  })();
+
+  setLang(lang);
+})();
+</script>
+</body>
+</html>
